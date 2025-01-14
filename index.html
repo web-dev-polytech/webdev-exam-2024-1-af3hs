@@ -1,11 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/style.css">
+    <title>Главная страница</title>
 </head>
+
 <body>
-  
+    <div class="wrapper">
+        <header class="header">
+            <div class="header-logo">
+                <img class="header-logo-img" src="img/logo.png">
+                <span class="header-logo-text">Товары 24</span>
+            </div>
+            
+            <div class="header-search">
+                <input placeholder="Введите запрос">
+                <button id="search">Найти</button>
+            </div>
+            <div class="header-redirects">
+                <a class="header-redirect" href="order.html"><img id="order-redirect" src="img/cart.png"></a>
+                <a class="header-redirect" href="orders.html"><img id="orders-redirect" src="img/profile.png"></a>
+            </div>
+        </header>
+
+
+        <div id="#" class="alert hidden">
+            <span class="alert-text"></span>
+            <button class="alert-close"><img class="alert-close-img" src="#"></button>
+        </div>
+
+
+        <main>
+            <aside>
+                <div class="sidebar">
+                    <section id="sidebar-categories" class="sidebar-section">
+                        <h2 class="sidebar-header">Категории</h2>
+                    </section>
+                    <section id="sidebar-price" class="sidebar-section">
+                        <h2 class="sidebar-header">Стоимость</h2>
+                    </section>
+                    <button id="apply-filters-button" class="button main-buttons">Применить</button>
+                </div>
+            </aside>
+
+            <div class="catalog">
+                <div class="catalog-header">
+                    <h1 class="section-header">Каталог</h1>
+                    <div class="dropdown">
+                        <button class="dropdown-button">По убыванию рейтинга</button>
+                        <div class="dropdown-content">
+                            <a href="#">По убыванию рейтинга</a>
+                            <a href="#">По возрастанию рейтинга</a>
+                            <a href="#">По убыванию денег</a>
+                            <a href="#">По возрастанию денег</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-container">
+                    <div class="product-card">
+                        <img src="https://edu.std-900.ist.mospolytech.ru/exam-2024-1/api/images/51soywcAI9L._AC_UL320_.jpg">
+                        <div class="product-desc-container">
+                            <h3 class="product-name">Supreme Bazaar Stainless Steel Napkin Ring/ Towel Hanger/ Napkin Holder, Wall Mounted for Kitchen, Wash Area, Bathroom Acc...</h3>
+                            <div class="product-rating">4,1 ★★★★★<span style="color: #b3b8ba;">★</span></div>
+                            <div class="product-price-container">
+                                <span class="product-price">2000 ₽</span>
+                                <div class="product-discount-container">
+                                    <span class="product-old-price">3000 ₽</span>
+                                    <span class="product-discount">-33%</span>
+                                </div>
+                            </div>
+                            <button class="add-to-cart main-buttons">Добавить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+
+        <footer>
+            <p class="footer-text">© 2025 Товары 24</p>
+        </footer>
+    </div>
+
+    <script type="module" src="scripts/shopping.js"></script>
 </body>
+
 </html>
