@@ -51,7 +51,7 @@ function buildCard(good) {
     good.rating
 } ${
     "★".repeat(filledStars)
-}<span style="color: #b3b8ba;">${
+}<span style="color: #1e425a; opacity: 0.4">${
     "★".repeat(hollowStars)
 }</span>
             </div>
