@@ -187,8 +187,6 @@ aside {
 
 }
 
-
-
 div.price-filter-block {
 	width: 100%;
 	display: flex;
@@ -259,11 +257,10 @@ div.price-filter-block-input > div > input:focus {
 .decrease-price {
 	padding: 0 5px 5px 0;
 }
-.button {
+#apply-filters-button {
 	width: 100%;
 	margin-top: 30px !important;
 }
-
 
 
 .catalog {
