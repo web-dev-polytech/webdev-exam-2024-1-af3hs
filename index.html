@@ -38,9 +38,39 @@
                 <div class="sidebar">
                     <section id="sidebar-categories" class="sidebar-section">
                         <h2 class="sidebar-header">Категории</h2>
+                        <ul class="filter-menu">
+                            
+                        </ul>
                     </section>
                     <section id="sidebar-price" class="sidebar-section">
                         <h2 class="sidebar-header">Стоимость</h2>
+                        <div class="price-filter-block">
+                            <div class="price-filter-block-input">
+                                <span>От</span>
+                                <div class="price-filter-input">
+                                    <input id="price-min" type="number" placeholder="77" min="0" step="100">
+                                    <div class="number-input-controls">
+                                        <button class="number-input-button increase-price">&#x25B2;</button>
+                                        <button class="number-input-button decrease-price">&#x25BC;</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="price-filter-block-input">
+                                <span>До</span>
+                                <div class="price-filter-input">
+                                    <input id="price-max" type="number" placeholder="7777" min="0" step="100">
+                                    <div class="number-input-controls">
+                                        <button class="number-input-button increase-price">&#x25B2;</button>
+                                        <button class="number-input-button decrease-price">&#x25BC;</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <label id="filter-by-sale" class="filter-item">
+                            <input id="sale-filter-checkbox" type="checkbox" name="sales_only">
+                            <span>Только товары со скидками</span>
+                        </label>
+                        
                     </section>
                     <button id="apply-filters-button" class="button main-buttons">Применить</button>
                 </div>

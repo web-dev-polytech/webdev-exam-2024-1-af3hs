@@ -32,6 +32,20 @@ async function translateToRussian(word) {
 //     .then(russianWord => console.log("Translated word:", russianWord))
 //     .catch(error => console.error(error));
 
+function prepareInterface() {
+    const priceFilterBlock = document.querySelector('div.price-filter-block');
+    priceFilterBlock.addEventListener('click', (event) => {
+        if (event.target.classList.contains('increase-price')) {
+            event.target.parentElement.parentElement.children[0].stepUp();
+        }
+    });
+    priceFilterBlock.addEventListener('click', (event) => {
+        if (event.target.classList.contains('decrease-price')) {
+            event.target.parentElement.parentElement.children[0].stepDown();
+        }
+    });
+}
+
 
 function buildCard(good) {
     const card = document.createElement("div");
@@ -41,7 +55,6 @@ function buildCard(good) {
     );
     const filledStars = Math.round(good.rating);
     const hollowStars = 5 - filledStars;
-    console.log("★".repeat(filledStars));
     card.innerHTML = `
         <img src="${good.image_url}">
         <div class="product-desc-container">
@@ -79,7 +92,18 @@ function buildCard(good) {
     
     return card;
 }
-
+function fillCategories(categories) {
+    const filterMenu = document.querySelector('ul.filter-menu');
+    for (let category in categories) {
+        const label = document.createElement('label');
+        label.classList.add('filter-item');
+        label.innerHTML = `
+            <input type="checkbox" name="${category}">
+            <span>${category}</span>
+        `;
+        filterMenu.appendChild(label);
+    }
+}
 async function fetchGoods() {
     const goodsUrl = `${baseUrl}${goodsURI}?api_key=${apiKey}`;
     try {
@@ -88,19 +112,25 @@ async function fetchGoods() {
             throw new Error(`Goods response status: ${goodsResponse.status}`);
         }
         const goods = await goodsResponse.json();
+        const categories = {};
 
-        const parentElement = document.querySelector('div.card-container');
+        const cardContainer = document.querySelector('div.card-container');
 
         // Append cards to container
         for (let i = 0; i < goods.length; i++) {
-            let card = buildCard(goods[i]);
-            parentElement.appendChild(card);
+            let good = goods[i];
+            let card = buildCard(good);
+            cardContainer.appendChild(card);
+            categories[good.main_category] = good.main_category;
         }
-        console.log(goods);
+        // Dynamically fill categories
+        fillCategories(categories);
+
     } catch (error) {
         console.error(error);
     }
 }
 
 
+prepareInterface();
 fetchGoods();
