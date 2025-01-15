@@ -146,43 +146,70 @@ h1.section-header {
 	margin: 50px 0px;
 }
 .dropdown {
-	position: relative;
-	display: inline-block;
+    position: relative;
+    display: inline-block;
 }
+.dropdown-button {
+    width: 100%;
+    padding: 13px 35px;
 
-.dropdown-content {
-	display: none;
-	position: absolute;
-	background-color: #f9f9f9;
-	min-width: 200px;
-	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-	z-index: 1;
+	font-size: 17px;
+	font-weight: 750;
+	color: #fdf4da;
+    background-color: #1e425a;
+	
+    border-radius: 10px;
+    border: none;
+    
+    cursor: pointer;
+    transition: border-radius 0.15s ease; /* Плавный переход углов */
 }
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+	padding-top: 10px;
+	
+	background-color: #1e425a;
+	color: #fdf4da;
+    border-radius: 0 0 10px 10px;
 
-.dropdown-content a {
-	color: black;
-	padding: 12px 16px;
-	text-decoration: none;
-	display: block;
+    overflow: hidden;
+    transform: scaleY(0); /* Сжатие по вертикали */
+    transform-origin: top; /* Точка открытия сверху */
+    transition: transform 0.23s ease; /* Плавный переход высоты */
+    z-index: 10;
 }
-
-.dropdown-content a:hover {
-	background-color: #f1f1f1;
+/* Открытие меню */
+.dropdown:hover .dropdown-button {
+    border-radius: 10px 10px 0 0;
 }
-
-.dropdown:hover .dropdown-content {
-	display: block;
+.dropdown:hover .dropdown-menu {
+    transform: scaleY(1); /* Выдвигаем меню */
+	transition-delay: 0.076s;
 }
-
-.dropdown .dropdown-button {
-	background-color: white;
-	color: black;
-	padding: 16px;
-	font-size: 16px;
-	border: 1px solid #ccc;
-	cursor: pointer;
-	width: 100%;
-	text-align: left;
+/* Закрытие меню без задержки */
+.dropdown:not(:hover) .dropdown-menu {
+    transform: scaleY(0); /* Скрываем меню */
+}
+.dropdown:not(:hover) .dropdown-button {
+    border-radius: 10px; /* Плавное восстановление углов */
+    transition-delay: 0.176s; /* Задержка для углов после закрытия меню */
+}
+/* Стили для пунктов меню */
+.dropdown-menu a {
+    display: block;
+    padding: 10px 35px;
+    text-decoration: none;
+    font-size: 14px;
+	font-weight: 450;
+    color: #fdf4da;
+    transition: background-color 0.3s ease;
+}
+.dropdown-menu a:hover {
+    background-color: #132d3e;
+    color: #fdf4da;
 }
 
 div.card-container {
@@ -193,13 +220,11 @@ div.card-container {
 	gap: 20px;
 	row-gap: 35px;
 }
-
 .product-card {
 	display: flex;
 	flex-direction: column;
 	background-color: #fdf4da;
 	width: 330px;
-	/* height: 480px; */
 	border-radius: 15px;
 	box-sizing: border-box;
 
