@@ -2,6 +2,8 @@ import {
     baseUrl, apiKey, goodsURI, ordersURI
 } from './utils.js';
 
+let startIndex = 0;
+let filterOptions = {};
 
 async function translateToRussian(word) {
     const apiUrl = "https://libretranslate.de/translate";
@@ -24,7 +26,7 @@ async function translateToRussian(word) {
 
     const data = await response.json();
     return data.translatedText;
-}
+};
 
 
 // // Example usage
@@ -50,11 +52,13 @@ function prepareInterface() {
 function buildCard(good) {
     const card = document.createElement("div");
     card.classList.add('product-card');
-    const discount_ratio = Math.round(
-        (1 - good.discount_price / good.actual_price) * 100
-    );
+    card.dataset.sale = false;
+    card.dataset.id = good.id;
+    card.dataset.price = good.actual_price;
+
     const filledStars = Math.round(good.rating);
     const hollowStars = 5 - filledStars;
+
     card.innerHTML = `
         <img src="${good.image_url}">
         <div class="product-desc-container">
@@ -72,8 +76,14 @@ function buildCard(good) {
             <button class="add-to-cart main-buttons">Добавить</button>
         </div>
     `;
+    
     const priceContainer = card.querySelector('div.product-price-container');
     if (good.discount_price) {
+        card.dataset.sale = true;
+        card.dataset.price = good.discount_price;
+        const discount_ratio = Math.round(
+            (1 - good.discount_price / good.actual_price) * 100
+        );
         priceContainer.innerHTML = `
             <span class="product-price">${good.discount_price} ₽</span>
             <div class="product-discount-container">
@@ -97,12 +107,166 @@ function fillCategories(categories) {
     for (let category in categories) {
         const label = document.createElement('label');
         label.classList.add('filter-item');
+        let catCapitalized = category.charAt(0).toUpperCase()
+                            + category.slice(1);
         label.innerHTML = `
             <input type="checkbox" name="${category}">
-            <span>${category}</span>
+            <span>${catCapitalized}</span>
         `;
         filterMenu.appendChild(label);
     }
+}
+function getCategories(goods) {
+    const categories = {};
+    for (let i = 0; i < goods.length; i++) {
+        let good = goods[i];
+        categories[good.main_category] = good.main_category;
+    }
+    return categories;
+}
+function createFetchMoreButton() {
+    const fetchMoreButton = document.createElement('button');
+    fetchMoreButton.classList.add('main-buttons');
+    fetchMoreButton.id = 'fetch-more-button';
+    fetchMoreButton.textContent = 'Загрузить ещё';
+    
+    return fetchMoreButton;
+}
+function filter(good, filterOptions, categoryCount) {
+    let goodDiscount = false;
+    if (good.discount_price) {
+        goodDiscount = true;
+    }
+    
+    const goodPrice = good.discount_price || good.actual_price;
+    if (!(filterOptions["priceMax"] === filterOptions["priceMax"]
+      && !(filterOptions["priceMax"]))) {
+        if (
+            !(filterOptions["priceMax"]
+           && (filterOptions["priceMax"] >= goodPrice
+           && goodPrice >= filterOptions["priceMin"]))
+        ) {
+            return false;
+        }
+    }
+
+    if (!(goodDiscount) && filterOptions["filterSaled"]) {
+        return false;
+    }
+    const filterCategories = filterOptions['filterCategories'];
+
+    if (filterCategories.length === 0 
+     || filterCategories.length === categoryCount) {
+        return true;
+    }
+    console.log(`filter cats: ${filterCategories}`);
+    console.log(good.main_category);
+    console.log(`global id = ${good.id}`);
+    if (!(filterCategories.includes(good.main_category))) {
+        return false;
+    }
+    
+    return true;
+}
+
+function addGoodCards(
+    goods,
+    filterOptions = {
+        filterCategories: [],
+        priceMin: 0,
+        priceMax: 0, 
+        filterSaled: false
+    },
+    count = 6,
+    categoryCount = 0
+) {
+    console.log(goods);
+    const cardContainer = document.querySelector('div.card-container');
+    
+    const goodsCount = goods.length;
+    let fetchMoreButton = document.querySelector(
+        'button#fetch-more-button'
+    );
+    
+    let renderedCount = 0;
+    let i = startIndex;
+    while (renderedCount <= count && i < goodsCount) {
+        console.log(`——————————————————————————————`);
+        console.log(`id = ${i} out of ${goodsCount}`);
+
+        let good = goods[i];
+        if (filter(good, filterOptions, categoryCount)) {
+            if (renderedCount < count) {
+                // Crete card
+                let card = buildCard(good);
+                cardContainer.appendChild(card);
+                if (i + 1 == goodsCount) {
+                    console.log('—— last element');
+                    if (fetchMoreButton) {
+                        console.log('————— remove fetch button');
+                        fetchMoreButton.remove();
+                    }
+                }
+            } else if (renderedCount === count) {
+                if (!(fetchMoreButton)) {
+                    fetchMoreButton = createFetchMoreButton();
+                    // "Fetch more" button functioning
+                    fetchMoreButton.addEventListener('click', () => {
+                        addGoodCards(
+                            goods, filterOptions, 6, categoryCount
+                        );
+                    });
+                    cardContainer.parentElement.appendChild(
+                        fetchMoreButton
+                    );
+                }
+            }
+            renderedCount++;
+        } else {
+            if (i + 1 == goodsCount) {
+                console.log('—— last element');
+                if (fetchMoreButton) {
+                    console.log('————— remove fetch button');
+                    fetchMoreButton.remove();
+                }
+            }
+        }
+        startIndex = i;
+        i++;
+    }
+}
+function collectOptions(filterOptionForm) {
+    const activeFilterCategories = Array.from(filterOptionForm.querySelectorAll(
+        '.filter-menu > .filter-item > input[type="checkbox"]:checked'
+    )).map((inputElement) => {
+        return inputElement.getAttribute('name');
+    });
+    const filterOptions = {
+        "filterCategories": activeFilterCategories
+    };
+
+    const priceMin = Number(
+        filterOptionForm.querySelector('input#price-min').value || 0
+    );
+    const priceMax = Number(
+        filterOptionForm.querySelector('input#price-max').value || 0
+    );
+    filterOptions["priceMin"] = priceMin;
+    filterOptions["priceMax"] = priceMax;
+    
+    const filterSaled = filterOptionForm.querySelector(
+        '#sale-filter-checkbox[type="checkbox"]:checked'
+    );
+    if (filterSaled) {
+        filterOptions["filterSaled"] = true;
+    } else {
+        filterOptions["filterSaled"] = false;
+    }
+    
+    return filterOptions;
+}
+function notify(message, type) {
+    alert(message);
 }
 async function fetchGoods() {
     const goodsUrl = `${baseUrl}${goodsURI}?api_key=${apiKey}`;
@@ -112,21 +276,54 @@ async function fetchGoods() {
             throw new Error(`Goods response status: ${goodsResponse.status}`);
         }
         const goods = await goodsResponse.json();
-        const categories = {};
-
-        const cardContainer = document.querySelector('div.card-container');
-
+        
         // Append cards to container
-        for (let i = 0; i < goods.length; i++) {
-            let good = goods[i];
-            let card = buildCard(good);
-            cardContainer.appendChild(card);
-            categories[good.main_category] = good.main_category;
-        }
+        addGoodCards(goods, undefined);
+
+        const categories = getCategories(goods);
+        const fetchMoreButton = document.querySelector(
+            'button#fetch-more-button'
+        );
+        const applyFiltersButton = document.querySelector(
+            'button#apply-filters-button'
+        );
+
+        // "Apply filters" button functioning
+        applyFiltersButton.addEventListener('click', () => {
+            filterOptions = collectOptions(
+                applyFiltersButton.parentElement
+            );
+            if (filterOptions['priceMin'] > filterOptions['priceMax']) {
+                const message = 
+                    "Нижняя граница стоимости не может быть больше верхней";
+                notify(message, "error");
+                console.error(message);
+                return;
+            }
+            startIndex = 0;
+            const catalog = document.querySelector('div.catalog');
+            let cardContainer = document.querySelector('div.card-container');
+            let fetchMoreButton = document.querySelector(
+                '#fetch-more-button'
+            );
+
+            if (cardContainer) cardContainer.remove();
+            if (fetchMoreButton) fetchMoreButton.remove();
+            
+            cardContainer = document.createElement('div');
+            cardContainer.classList.add('card-container');
+            catalog.appendChild(cardContainer);
+
+            const allCategoriesLength = Object.keys(categories).length;
+            console.log(`length of all categories: ${allCategoriesLength}`);
+            addGoodCards(goods, filterOptions, 6, allCategoriesLength);
+        });
+
         // Dynamically fill categories
         fillCategories(categories);
 
     } catch (error) {
+        notify(error, "error");
         console.error(error);
     }
 }

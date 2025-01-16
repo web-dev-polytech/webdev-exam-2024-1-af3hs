@@ -62,11 +62,14 @@ div.header-search {
 	border-radius: 10px;
 	overflow: hidden;
 }
+input {
+	font-family: inherit;
+}
 div.header-search > input {
 	flex-grow: 1;
-	padding: 14px 10px 14px 25px;
+	padding: 13px 10px 13px 25px;
 	font-size: 20px;
-	font-weight: 600;
+	font-weight: 550;
 	border: none;
 
 	color: #1e425a !important;
@@ -107,6 +110,7 @@ div.header-search > button {
 
 main {
 	display: flex;
+	flex-grow: 1;
 }
 aside {
 	background-color: #fdf4da;
@@ -116,7 +120,7 @@ aside {
 	transition: 0.5s ease;
 }
 .sidebar {
-	padding: 10px 25px 0 25px;
+	padding: 10px 25px 35px 25px;
 	position: sticky;
 	width: 20vw;
 	top: 0;
@@ -135,7 +139,7 @@ aside {
 .filter-item {
 	display: flex;
 	align-items: center;
-	font-size: 21px;
+	font-size: 23px;
 	font-weight: 600;
 	padding: 7px 0;
 	color: #333;
@@ -203,7 +207,7 @@ div.price-filter-block-input {
 	gap: 10px;
 }
 div.price-filter-block-input > span {
-	font-size: 22px;
+	font-size: 21px;
 	font-weight: 550;
 }
 .price-filter-input {
@@ -216,10 +220,9 @@ div.price-filter-block-input > span {
 }
 div.price-filter-block-input > div > input {
 	width: 80%;
-	padding: 10px 0 10px 17px;
-	font-family: inherit;
-	font-size: 22px;
-	font-weight: 700;
+	padding: 8px 0 8px 17px;
+	font-size: 21px;
+	font-weight: 650;
 	border: none;
 
 	color: #1e425a;
@@ -306,7 +309,8 @@ h1.section-header {
     top: 100%;
     left: 0;
     width: 100%;
-	padding-top: 10px;
+	padding: 10px 0;
+
 	
 	background-color: #1e425a;
 	color: #fdf4da;
@@ -356,6 +360,7 @@ div.card-container {
 	flex-wrap: wrap;
 	gap: 20px;
 	row-gap: 35px;
+	margin-bottom: 50px;
 }
 .product-card {
 	display: flex;
@@ -365,14 +370,13 @@ div.card-container {
 	border-radius: 15px;
 	box-sizing: border-box;
 
+	cursor: pointer;
 	overflow: scroll;
 	filter: drop-shadow(17px 19px 24px rgba(0, 0, 0, 0.09));
 	transition: transform 0.6s ease, filter 1s ease;
 }
 .product-card:hover {
 	position: relative;
-	transform: scale(1);
-
 	filter: drop-shadow(17px 19px 24px rgba(0, 0, 0, 0.25));
 	transform: scale(1.015);
 }
@@ -406,6 +410,8 @@ div.product-desc-container {
 	font-size: 20px;
 	font-weight: 700;
 	flex-grow: 1;
+	width: 100%;
+    text-overflow: ellipsis;
 }
 .product-rating {
 	margin-top: 5px;
@@ -434,6 +440,7 @@ div.product-desc-container {
 	font-weight: 700;
 }
 button.main-buttons {
+	font-family: inherit;
 	font-size: 15px;
 	font-weight: 700;
 	
@@ -449,10 +456,25 @@ button.main-buttons {
 	transition: 0.5s ease;
 }
 button.main-buttons:hover {
-
 	background-color: #132d3e !important;
 }
+#fetch-more-button {
+	width: 100%;
+	height: 50px;
+	font-size: 22px;
+	font-weight: 800;
+	
+	margin-bottom: 35px;
+	border-radius: 15px;
 
+	filter: drop-shadow(17px 19px 24px rgba(0, 0, 0, 0.09));
+	transition: transform 0.6s ease, filter 1s ease;
+}
+#fetch-more-button:hover {
+	position: relative;
+	filter: drop-shadow(17px 19px 24px rgba(0, 0, 0, 0.25));
+	transform: scale(1.005);
+}
 
 footer {
 	padding: 30px;
