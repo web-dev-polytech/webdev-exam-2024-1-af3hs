@@ -2,6 +2,10 @@ import {
     baseUrl, apiKey, goodsURI, ordersURI
 } from './utils.js';
 
+
+let attemptCount = 0;
+let totalAttempts = 10;
+
 let startIndex = 0;
 let filterOptions = {};
 
@@ -49,7 +53,7 @@ function prepareInterface() {
 }
 
 
-function buildCard(good) {
+function buildCard(good, chosen = false) {
     const card = document.createElement("div");
     card.classList.add('product-card');
     card.dataset.sale = false;
@@ -58,7 +62,12 @@ function buildCard(good) {
 
     const filledStars = Math.round(good.rating);
     const hollowStars = 5 - filledStars;
-
+    let buttonText = 'Добавить';
+    if (chosen) {
+        card.classList.add('chosen');
+        buttonText = 'Удалить';
+    }
+    
     card.innerHTML = `
         <img src="${good.image_url}">
         <div class="product-desc-container">
@@ -73,7 +82,7 @@ function buildCard(good) {
 }</span>
             </div>
             <div class="product-price-container"></div>
-            <button class="add-to-cart main-buttons">Добавить</button>
+            <button class="add-to-cart main-buttons">${buttonText}</button>
         </div>
     `;
     
@@ -102,6 +111,24 @@ function buildCard(good) {
     
     return card;
 }
+function workWithCard(event) {
+    const card = event.target.parentElement.parentElement;
+    const id = card.dataset.id;
+    
+    let updatedOrderGoods = JSON.parse(localStorage.getItem('orderGoods'));
+
+    const cardChosen = card.classList.contains('chosen');
+    if (!(cardChosen)) {
+        updatedOrderGoods[id] = id;
+        event.target.textContent = 'Удалить';
+    } else {
+        delete updatedOrderGoods[id];
+        event.target.textContent = 'Добавить';
+    }
+    localStorage.setItem('orderGoods', JSON.stringify(updatedOrderGoods));
+    card.classList.toggle('chosen');
+}
+
 function fillCategories(categories) {
     const filterMenu = document.querySelector('ul.filter-menu');
     for (let category in categories) {
@@ -133,6 +160,8 @@ function createFetchMoreButton() {
     return fetchMoreButton;
 }
 function filter(good, filterOptions, categoryCount) {
+    console.log(`global id = ${good.id}`);
+
     let goodDiscount = false;
     if (good.discount_price) {
         goodDiscount = true;
@@ -159,9 +188,6 @@ function filter(good, filterOptions, categoryCount) {
      || filterCategories.length === categoryCount) {
         return true;
     }
-    console.log(`filter cats: ${filterCategories}`);
-    console.log(good.main_category);
-    console.log(`global id = ${good.id}`);
     if (!(filterCategories.includes(good.main_category))) {
         return false;
     }
@@ -190,22 +216,20 @@ function addGoodCards(
     
     let renderedCount = 0;
     let i = startIndex;
+    const orderGoods = JSON.parse(localStorage.getItem('orderGoods'));
     while (renderedCount <= count && i < goodsCount) {
-        console.log(`——————————————————————————————`);
+        console.log(`———————————————————`);
         console.log(`id = ${i} out of ${goodsCount}`);
 
         let good = goods[i];
         if (filter(good, filterOptions, categoryCount)) {
             if (renderedCount < count) {
                 // Crete card
-                let card = buildCard(good);
+                let chosen = good.id in orderGoods;
+                let card = buildCard(good, chosen);
                 cardContainer.appendChild(card);
                 if (i + 1 == goodsCount) {
-                    console.log('—— last element');
-                    if (fetchMoreButton) {
-                        console.log('————— remove fetch button');
-                        fetchMoreButton.remove();
-                    }
+                    if (fetchMoreButton) fetchMoreButton.remove();
                 }
             } else if (renderedCount === count) {
                 if (!(fetchMoreButton)) {
@@ -224,11 +248,7 @@ function addGoodCards(
             renderedCount++;
         } else {
             if (i + 1 == goodsCount) {
-                console.log('—— last element');
-                if (fetchMoreButton) {
-                    console.log('————— remove fetch button');
-                    fetchMoreButton.remove();
-                }
+                if (fetchMoreButton) fetchMoreButton.remove();
             }
         }
         startIndex = i;
@@ -269,6 +289,10 @@ function notify(message, type) {
     alert(message);
 }
 async function fetchGoods() {
+    if (!(localStorage.getItem('orderGoods'))) {
+        localStorage.setItem('orderGoods', JSON.stringify({}));
+    }
+
     const goodsUrl = `${baseUrl}${goodsURI}?api_key=${apiKey}`;
     try {
         const goodsResponse = await fetch(goodsUrl, {method: 'GET'});
@@ -276,7 +300,13 @@ async function fetchGoods() {
             throw new Error(`Goods response status: ${goodsResponse.status}`);
         }
         const goods = await goodsResponse.json();
-        
+
+        const catalog = document.querySelector('div.catalog');
+        catalog.addEventListener('click', (event) => {
+            if (event.target.classList.contains('add-to-cart')) {
+                workWithCard(event);
+            }
+        });
         // Append cards to container
         addGoodCards(goods, undefined);
 
@@ -301,7 +331,6 @@ async function fetchGoods() {
                 return;
             }
             startIndex = 0;
-            const catalog = document.querySelector('div.catalog');
             let cardContainer = document.querySelector('div.card-container');
             let fetchMoreButton = document.querySelector(
                 '#fetch-more-button'
@@ -315,7 +344,6 @@ async function fetchGoods() {
             catalog.appendChild(cardContainer);
 
             const allCategoriesLength = Object.keys(categories).length;
-            console.log(`length of all categories: ${allCategoriesLength}`);
             addGoodCards(goods, filterOptions, 6, allCategoriesLength);
         });
 
@@ -325,6 +353,14 @@ async function fetchGoods() {
     } catch (error) {
         notify(error, "error");
         console.error(error);
+
+        if (
+            error.message.includes(`Goods response status:`)
+            && attemptCount < totalAttempts - 1
+        ) {
+            attemptCount++;
+            setTimeout(fetchGoods, 5000);
+        }
     }
 }
 

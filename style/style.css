@@ -24,6 +24,25 @@ body {
 .hidden {
 	display: none;
 }
+.chosen {
+	background-color: #f4e9ce !important;
+	opacity: 0.9;
+	filter: none !important;
+	box-shadow: inset 0px 0px 20px #32230350;
+	
+}
+.chosen:hover {
+	transform: none !important;
+}
+.chosen button.main-buttons {
+	color: #fff6dae7 !important;
+	font-weight: 900 !important;
+	background-color: #04223796 !important;
+	transition: 0.3s ease;
+}
+.chosen button.main-buttons:hover {
+	color: #fdf4dae7 !important;
+}
 
 
 .header {
@@ -373,7 +392,7 @@ div.card-container {
 	cursor: pointer;
 	overflow: scroll;
 	filter: drop-shadow(17px 19px 24px rgba(0, 0, 0, 0.09));
-	transition: transform 0.6s ease, filter 1s ease;
+	transition: transform 0.6s ease, filter 1s ease, 0.5s ease;
 }
 .product-card:hover {
 	position: relative;
