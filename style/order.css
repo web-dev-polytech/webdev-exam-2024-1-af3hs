@@ -1,0 +1,41 @@
+form#order {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    margin-bottom: 50px;
+
+    font-size: 28px;
+    font-weight: 500;
+
+    gap: 8%;
+}
+
+.form-part-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 34%;
+    gap: 30px;
+}
+.field-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+#spam-letters-container:hover {
+    cursor: pointer !important;
+}
+.field-container input:not([type="checkbox"]),
+textarea {
+    background-color: #fdf4da !important;
+    border-radius: 7px;
+    width: 100% !important;
+}
+
+.form-buttons-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.input-form-button {
+    width: 200px;
+}

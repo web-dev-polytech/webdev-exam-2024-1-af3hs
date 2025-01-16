@@ -165,7 +165,8 @@ aside {
 	cursor: pointer;
 	gap: 8px;
 }
-.filter-item input[type="checkbox"] {
+.filter-item input[type="checkbox"],
+form#order input[type="checkbox"] {
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
@@ -181,10 +182,12 @@ aside {
 	position: relative;
 	transition: all 0.3s ease;
 }
-.filter-item input[type="checkbox"]:checked {
+.filter-item input[type="checkbox"]:checked,
+form#order input[type="checkbox"]:checked {
 	background-color: #1e425a;
 }
-.filter-item input[type="checkbox"]:checked::after {
+.filter-item input[type="checkbox"]:checked::after,
+form#order input[type="checkbox"]:checked::after {
 	content: '';
 	position: absolute;
 	top: 2.7px;
@@ -197,7 +200,8 @@ aside {
 	border-width: 0 2px 2px 0;
 	transform: rotate(45deg);
 }
-.filter-item input[type="checkbox"]:hover {
+.filter-item input[type="checkbox"]:hover,
+form#order input[type="checkbox"]:hover {
 	background-color: #132d3e;
 	opacity: 1;
 }
@@ -237,7 +241,9 @@ div.price-filter-block-input > span {
 	border-radius: 7px;
 	overflow: hidden;
 }
-div.price-filter-block-input > div > input {
+div.price-filter-block-input > div > input,
+.field-container input,
+textarea {
 	width: 80%;
 	padding: 8px 0 8px 17px;
 	font-size: 21px;
@@ -247,7 +253,9 @@ div.price-filter-block-input > div > input {
 	color: #1e425a;
 	background-color: #f2e6c9;
 }
-div.price-filter-block-input > div > input:focus {
+div.price-filter-block-input > div > input:focus,
+.field-container input,
+textarea {
     outline: none;
 }
 .price-filter-block-input input[type=number]::-webkit-outer-spin-button,
@@ -285,7 +293,7 @@ div.price-filter-block-input > div > input:focus {
 }
 
 
-.catalog {
+.catalog, .order-page-wrapper {
 	background-color: #f2e6c9;
 	flex-grow: 1;
 	overflow-y: scroll;
@@ -372,7 +380,7 @@ h1.section-header {
     color: #fdf4da;
 }
 
-div.card-container {
+.card-container {
 	display: flex;
 	justify-content: start;
 	align-content: start;

@@ -1,11 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/order.css"></linkrel>
+    <title>Главная страница</title>
 </head>
+
 <body>
-    
+    <div class="wrapper">
+        <header class="header">
+            <div class="header-logo">
+                <img class="header-logo-img" src="img/logo.png">
+                <span class="header-logo-text">Товары 24</span>
+            </div>
+            
+            <div class="header-redirects">
+                <a class="header-redirect" href="index.html"><img id="catalog-redirect" src="img/catalog.png"></a>
+                <a class="header-redirect" href="orders.html"><img id="orders-redirect" src="img/profile.png"></a>
+            </div>
+        </header>
+
+
+        <div id="#" class="alert hidden">
+            <span class="alert-text"></span>
+            <button class="alert-close"><img class="alert-close-img" src="#"></button>
+        </div>
+
+
+        <main>
+            <div class="order-page-wrapper">
+                <div class="catalog-header">
+                    <h1 class="section-header">Каталог</h1>
+                </div>
+                <div id="order-cards" class="card-container">
+                    
+                </div>
+
+                <div class="catalog-header">
+                    <h1 class="section-header">Оформление заказа</h1>
+                </div>
+                <form id="order" class="input-section" method="post" action="https://httpbin.org/post">
+                    <div id="order-form-part" class="input-form form-part-wrapper">
+                        <div class="field-container">
+                            <label class="input-form-label" for="name">Имя</label>
+                            <input id="name" class="input-form-item" type="text" name="full_name" required>
+                        </div>
+                        <div class="field-container">
+                            <label class="input-form-label" for="phone">Номер телефона</label>
+                            <input id="phone" class="input-form-item" type="tel" name="phone" required>
+                        </div>
+                        <div class="field-container">
+                            <label class="input-form-label" for="email">Email</label>
+                            <input id="email" class="input-form-item" type="email" name="email" required>
+                            <div id="spam-letters-container">
+                                <input id="spam-letters" type="checkbox" name="subscribe" checked value="true">
+                                <label for="spam-letters">Подписаться на рассылку</label>
+                            </div>
+                        </div>
+                        <div class="field-container">
+                            <label class="input-form-label" for="comment">Комментарий</label>
+                            <textarea id="comment" class="input-form-item" name="comment"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="input-form form-part-wrapper">
+                        <div class="field-container">
+                            <label class="input-form-label" for="address">Адрес доставки</label>
+                            <input id="address" class="input-form-item" name="delivery_address" type="text" required>
+                        </div>
+                        <div class="field-container">
+                            <label class="input-form-label" for="delivery-time">Временной интервал доставки</label>
+                            <input type="time" id="delivery-date" class="input-form-item" name="delivery_time" min="07:00" max="23:00" step="300">
+                        </div>
+                        <div class="field-container">
+                            <label class="input-form-label" for="delivery-time">Временной интервал доставки</label>
+                            <input type="time" id="delivery-time" class="input-form-item" name="delivery_time" min="07:00" max="23:00" step="300">
+                        </div>
+                        <div class="form-buttons-container">
+                            <button type="reset" class="input-form-button main-buttons" form="order">Сбросить</button>
+                            <button type="submit" class="input-form-button main-buttons" form="order">Отправить</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+
+        <footer>
+            <p class="footer-text">© 2025 Товары 24</p>
+        </footer>
+    </div>
+
+    <script type="module" src="scripts/order.js"></script>
 </body>
+
 </html>

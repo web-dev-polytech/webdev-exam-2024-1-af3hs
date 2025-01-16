@@ -1,42 +1,16 @@
 import {
-    baseUrl, apiKey, goodsURI, ordersURI
+    // constants
+    totalAttempts, baseUrl, apiKey, goodsURI,
+    // functions
+    notify, buildCard
 } from './utils.js';
 
 
 let attemptCount = 0;
-let totalAttempts = 10;
 
 let startIndex = 0;
 let filterOptions = {};
 
-async function translateToRussian(word) {
-    const apiUrl = "https://libretranslate.de/translate";
-    const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            q: word,
-            source: "en",
-            target: "ru",
-            format: "text"
-        })
-    });
-
-    if (!response.ok) {
-        throw new Error("Translation API error: " + response.statusText);
-    }
-
-    const data = await response.json();
-    return data.translatedText;
-};
-
-
-// // Example usage
-// translateToRussian("hello")
-//     .then(russianWord => console.log("Translated word:", russianWord))
-//     .catch(error => console.error(error));
 
 function prepareInterface() {
     const priceFilterBlock = document.querySelector('div.price-filter-block');
@@ -53,64 +27,6 @@ function prepareInterface() {
 }
 
 
-function buildCard(good, chosen = false) {
-    const card = document.createElement("div");
-    card.classList.add('product-card');
-    card.dataset.sale = false;
-    card.dataset.id = good.id;
-    card.dataset.price = good.actual_price;
-
-    const filledStars = Math.round(good.rating);
-    const hollowStars = 5 - filledStars;
-    let buttonText = 'Добавить';
-    if (chosen) {
-        card.classList.add('chosen');
-        buttonText = 'Удалить';
-    }
-    
-    card.innerHTML = `
-        <img src="${good.image_url}">
-        <div class="product-desc-container">
-            <h3 class="product-name">${good.name}</h3>
-            <div class="product-rating">
-                ${
-    good.rating
-} ${
-    "★".repeat(filledStars)
-}<span style="color: #1e425a; opacity: 0.4">${
-    "★".repeat(hollowStars)
-}</span>
-            </div>
-            <div class="product-price-container"></div>
-            <button class="add-to-cart main-buttons">${buttonText}</button>
-        </div>
-    `;
-    
-    const priceContainer = card.querySelector('div.product-price-container');
-    if (good.discount_price) {
-        card.dataset.sale = true;
-        card.dataset.price = good.discount_price;
-        const discount_ratio = Math.round(
-            (1 - good.discount_price / good.actual_price) * 100
-        );
-        priceContainer.innerHTML = `
-            <span class="product-price">${good.discount_price} ₽</span>
-            <div class="product-discount-container">
-                <span class="product-old-price">
-                    ${good.actual_price} ₽
-                </span>
-                <span class="product-discount">-${discount_ratio}%</span>
-            </div>
-            `;
-    } else {
-        priceContainer.innerHTML = `
-            <span class="product-price">${good.actual_price} ₽</span>
-            <div class="product-discount-container"></div>
-            `;
-    }
-    
-    return card;
-}
 function workWithCard(event) {
     const card = event.target.parentElement.parentElement;
     const id = card.dataset.id;
@@ -128,7 +44,6 @@ function workWithCard(event) {
     localStorage.setItem('orderGoods', JSON.stringify(updatedOrderGoods));
     card.classList.toggle('chosen');
 }
-
 function fillCategories(categories) {
     const filterMenu = document.querySelector('ul.filter-menu');
     for (let category in categories) {
@@ -226,7 +141,7 @@ function addGoodCards(
             if (renderedCount < count) {
                 // Crete card
                 let chosen = good.id in orderGoods;
-                let card = buildCard(good, chosen);
+                let card = buildCard(good, true, chosen);
                 cardContainer.appendChild(card);
                 if (i + 1 == goodsCount) {
                     if (fetchMoreButton) fetchMoreButton.remove();
@@ -284,9 +199,6 @@ function collectOptions(filterOptionForm) {
     }
     
     return filterOptions;
-}
-function notify(message, type) {
-    alert(message);
 }
 async function fetchGoods() {
     if (!(localStorage.getItem('orderGoods'))) {
