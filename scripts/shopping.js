@@ -277,5 +277,5 @@ async function fetchGoods() {
 }
 
 
-prepareInterface();
 fetchGoods();
+prepareInterface();

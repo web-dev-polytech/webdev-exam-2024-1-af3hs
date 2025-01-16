@@ -46,15 +46,15 @@
                     <div id="order-form-part" class="input-form form-part-wrapper">
                         <div class="field-container">
                             <label class="input-form-label" for="name">Имя</label>
-                            <input id="name" class="input-form-item" type="text" name="full_name" required>
+                            <input id="name" class="input-form-item" type="text" name="full_name" placeholder="Иванов Иван" required>
                         </div>
                         <div class="field-container">
                             <label class="input-form-label" for="phone">Номер телефона</label>
-                            <input id="phone" class="input-form-item" type="tel" name="phone" required>
+                            <input id="phone" class="input-form-item" type="tel" name="phone" placeholder="8 800-555-3535" required>
                         </div>
                         <div class="field-container">
                             <label class="input-form-label" for="email">Email</label>
-                            <input id="email" class="input-form-item" type="email" name="email" required>
+                            <input id="email" class="input-form-item" type="email" name="email" placeholder="ivan1990@gmail.com" required>
                             <div id="spam-letters-container">
                                 <input id="spam-letters" type="checkbox" name="subscribe" checked value="true">
                                 <label for="spam-letters">Подписаться на рассылку</label>
@@ -69,19 +69,25 @@
                     <div class="input-form form-part-wrapper">
                         <div class="field-container">
                             <label class="input-form-label" for="address">Адрес доставки</label>
-                            <input id="address" class="input-form-item" name="delivery_address" type="text" required>
+                            <input id="address" class="input-form-item" name="delivery_address" type="text" placeholder="ул. Пушкина, 43" required>
                         </div>
                         <div class="field-container">
-                            <label class="input-form-label" for="delivery-time">Временной интервал доставки</label>
-                            <input type="time" id="delivery-date" class="input-form-item" name="delivery_time" min="07:00" max="23:00" step="300">
+                            <label class="input-form-label" for="delivery-date">Дата доставки</label>
+                            <input type="date" id="delivery-date" class="input-form-item" name="delivery_date" required>
                         </div>
                         <div class="field-container">
-                            <label class="input-form-label" for="delivery-time">Временной интервал доставки</label>
-                            <input type="time" id="delivery-time" class="input-form-item" name="delivery_time" min="07:00" max="23:00" step="300">
+                            <label class="input-form-label" for="delivery-interval">Временной интервал доставки</label>
+                            <select type="time" id="delivery-interval" class="input-form-item" name="delivery_interval" placeholder="11.01.2025" required>
+                                <option value="">Выберите временной интервал</option>
+                                <option value="08:00-12:00">08:00-12:00</option>
+                                <option value="12:00:14:00">12:00-14:00</option>
+                                <option value="14:00-18:00">14:00-18:00</option>
+                                <option value="18:00-22:00">18:00-22:00</option>
+                            </select>
                         </div>
                         <div class="form-buttons-container">
                             <button type="reset" class="input-form-button main-buttons" form="order">Сбросить</button>
-                            <button type="submit" class="input-form-button main-buttons" form="order">Отправить</button>
+                            <button type="submit" class="input-form-button main-buttons" form="order">Оформить</button>
                         </div>
                     </div>
                 </form>

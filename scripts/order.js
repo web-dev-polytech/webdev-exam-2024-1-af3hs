@@ -7,6 +7,31 @@ import {
 
 let total = 0;
 
+
+function prepareInterface() {
+    const dateInput = document.getElementById('delivery-date');
+    const todayRaw = new Date();
+    const tomorrowRaw = new Date(todayRaw);
+    tomorrowRaw.setDate(todayRaw.getDate() + 1);
+    
+    const year = todayRaw.getFullYear();
+    const month = todayRaw.getMonth() + 1;
+    const date = todayRaw.getDate();
+    const today = `${year}\
+        -${String(month).padStart(2, '0')}\
+        -${String(date).padStart(2, '0')}`.replaceAll(' ', '');
+    const tomorrowYear = tomorrowRaw.getFullYear();
+    const tomorrowMonth = tomorrowRaw.getMonth() + 1;
+    const tomorrowDate = tomorrowRaw.getDate();
+    const tomorrow = `${tomorrowYear}\
+        -${String(tomorrowMonth).padStart(2, '0')}\
+        -${String(tomorrowDate).padStart(2, '0')}`.replaceAll(' ', '');
+
+    dateInput.min = today;
+    dateInput.value = tomorrow;
+}
+
+
 function addOrderGoods(orderGoods, goods) {
     const preparedCardIds = Object.keys(orderGoods).map(Number);
     const orderCards = document.querySelector('div#order-cards');
@@ -75,3 +100,4 @@ async function fetchCart() {
 
 
 fetchCart();
+prepareInterface();

@@ -1,11 +1,11 @@
 form#order {
     display: flex;
     justify-content: start;
-    align-items: start;
+    align-items: stretch;
     margin-bottom: 50px;
 
-    font-size: 28px;
-    font-weight: 500;
+    font-size: 24px;
+    font-weight: 550;
 
     gap: 8%;
 }
@@ -14,27 +14,74 @@ form#order {
     display: flex;
     flex-direction: column;
     width: 34%;
+    height: auto;
     gap: 30px;
+}
+input.input-form-item, textarea,
+select.input-form-item {
+    padding-right: 17px;
 }
 .field-container {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
-#spam-letters-container:hover {
-    cursor: pointer !important;
+#spam-letters-container {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+
+    font-size: 21px;
+    gap: 7px;
+}
+#spam-letters-container:hover,
+#spam-letters-container > label:hover {
+    cursor: pointer;
+}
+input#spam-letters {
+    background-color: #fdf4da !important;
+}
+#spam-letters-container > label {
+    flex-grow: 1;
+}
+form#order input[type="checkbox"]:checked {
+    background-color: #1e425a !important;
+}
+form#order input[type="checkbox"]:hover {
+    background-color: #132d3e !important;
 }
 .field-container input:not([type="checkbox"]),
+.field-container select,
 textarea {
     background-color: #fdf4da !important;
     border-radius: 7px;
     width: 100% !important;
+}
+.field-container select {
+    font-family: inherit;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 30px;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 22px center;
+    background-size: 16px 16px;
+}
+textarea {
+    height: 140px;
+    /* heigaht: max-content; */
+    /* min-height: 90px;
+    max-height: 90px; */
+    resize: none;
 }
 
 .form-buttons-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    
+    margin-top: auto;
 }
 .input-form-button {
     width: 200px;

@@ -63,7 +63,7 @@ body {
 	align-items: center;
 	cursor: pointer;
 
-	gap: 7px;
+	gap: 10px;
 }
 
 .header-logo-text {
@@ -117,7 +117,7 @@ div.header-search > button {
 	justify-content: space-between;
 	align-items: center;
 
-	gap: 15px;
+	gap: 20px;
 }
 #order-redirect {
 	width: 55px;
@@ -243,6 +243,7 @@ div.price-filter-block-input > span {
 }
 div.price-filter-block-input > div > input,
 .field-container input,
+.field-container select,
 textarea {
 	width: 80%;
 	padding: 8px 0 8px 17px;
@@ -255,6 +256,7 @@ textarea {
 }
 div.price-filter-block-input > div > input:focus,
 .field-container input,
+.field-container select,
 textarea {
     outline: none;
 }
