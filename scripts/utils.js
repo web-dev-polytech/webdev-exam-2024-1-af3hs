@@ -71,3 +71,16 @@ export function buildCard(good, onCatalogPage = true, chosen = false) {
     
     return card;
 }
+
+export function createNothingBlock(nothingBlockMain, nothingBlockDescription) {
+    const nothingBlock = document.createElement('div');
+    nothingBlock.classList.add('nothing-block');
+    nothingBlock.innerHTML = `
+        <span class="nothing-block-main">${nothingBlockMain}</span>
+        <span class="nothing-block-description">
+            ${nothingBlockDescription}
+        </span>
+    `;
+
+    return nothingBlock;
+}

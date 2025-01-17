@@ -43,6 +43,20 @@ body {
 .chosen button.main-buttons:hover {
 	color: #fdf4dae7 !important;
 }
+.nothing-block {
+    display: flex;
+    flex-direction: column;
+    font-size: 25px;
+
+    gap: 35px;
+}
+.nothing-block-main {
+    font-size: 30px;
+    font-weight: 300;
+}
+.nothing-block-description {
+    font-weight: 500;
+}
 
 
 .header {
@@ -98,8 +112,8 @@ div.header-search > input:focus {
     outline: none;
 }
 input::placeholder {
-    color: #1e425a; /* Change placeholder text color */
-    opacity: 0.6; /* Optional: Adjust opacity */
+    color: #1e425a;
+    opacity: 0.6;
 }
 div.header-search > button {
 	padding: 10px 25px;
@@ -390,6 +404,7 @@ h1.section-header {
 	gap: 20px;
 	row-gap: 35px;
 	margin-bottom: 50px;
+	transition: 1s;
 }
 .product-card {
 	display: flex;

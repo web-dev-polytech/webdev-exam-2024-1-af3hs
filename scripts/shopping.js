@@ -2,7 +2,7 @@ import {
     // constants
     totalAttempts, baseUrl, apiKey, goodsURI,
     // functions
-    notify, buildCard
+    notify, buildCard, createNothingBlock
 } from './utils.js';
 
 
@@ -121,7 +121,6 @@ function addGoodCards(
     count = 6,
     categoryCount = 0
 ) {
-    console.log(goods);
     const cardContainer = document.querySelector('div.card-container');
     
     const goodsCount = goods.length;
@@ -168,6 +167,24 @@ function addGoodCards(
         }
         startIndex = i;
         i++;
+    }
+    let nothingBlock = document.querySelector('.nothing-block');
+    if (!(cardContainer.children.length)) {
+        if (!(nothingBlock)) {
+            const nothingBlockMain = 'Товаров нет...';
+            const nothingBlockDescription = 
+                'Поменяйте фильтры или повторите попытку позже';
+            nothingBlock = createNothingBlock(
+                nothingBlockMain,
+                nothingBlockDescription
+            );
+            cardContainer.parentElement.insertBefore(
+                nothingBlock,
+                cardContainer
+            );
+        }
+    } else {
+        if (nothingBlock) nothingBlock.remove();
     }
 }
 function collectOptions(filterOptionForm) {
@@ -263,6 +280,21 @@ async function fetchGoods() {
         fillCategories(categories);
 
     } catch (error) {
+        const cardContainer = document.querySelector('div.card-container');
+        let nothingBlock = document.querySelector('.nothing-block');
+        if (!(nothingBlock)) {
+            const nothingBlockMain = 'Товаров нет...';
+            const nothingBlockDescription = 
+                'Поменяйте фильтры или повторите попытку позже';
+            nothingBlock = createNothingBlock(
+                nothingBlockMain,
+                nothingBlockDescription
+            );
+            cardContainer.parentElement.insertBefore(
+                nothingBlock,
+                cardContainer
+            );
+        }
         notify(error, "error");
         console.error(error);
 

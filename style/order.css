@@ -70,9 +70,6 @@ textarea {
 }
 textarea {
     height: 140px;
-    /* heigaht: max-content; */
-    /* min-height: 90px;
-    max-height: 90px; */
     resize: none;
 }
 

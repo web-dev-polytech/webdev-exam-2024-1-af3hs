@@ -2,7 +2,7 @@ import {
     // constants
     totalAttempts, baseUrl, apiKey, goodsURI,
     // functions
-    notify, buildCard
+    notify, buildCard, createNothingBlock
 } from './utils.js';
 
 let total = 0;
@@ -13,7 +13,7 @@ function prepareInterface() {
     const todayRaw = new Date();
     const tomorrowRaw = new Date(todayRaw);
     tomorrowRaw.setDate(todayRaw.getDate() + 1);
-    
+
     const year = todayRaw.getFullYear();
     const month = todayRaw.getMonth() + 1;
     const date = todayRaw.getDate();
@@ -35,12 +35,24 @@ function prepareInterface() {
 function addOrderGoods(orderGoods, goods) {
     const preparedCardIds = Object.keys(orderGoods).map(Number);
     const orderCards = document.querySelector('div#order-cards');
-    for (let good of goods) {
-        if (preparedCardIds.includes(good.id)) {
-            const card = buildCard(good, false);
-            orderCards.appendChild(card);
-            total += Number(card.dataset.price);
+    if (preparedCardIds.length) {
+        for (let good of goods) {
+            if (preparedCardIds.includes(good.id)) {
+                const card = buildCard(good, false);
+                orderCards.appendChild(card);
+                total += Number(card.dataset.price);
+            }
         }
+    } else {
+        const nothingBlockMain = "Корзина пуста...";
+        const nothingBlockDescription = 
+            'Перейдите в <a href="/">каталог</a>, чтобы добавить товары';
+        const nothingBlock = createNothingBlock(
+            nothingBlockMain,
+            nothingBlockDescription
+        );
+        
+        orderCards.parentElement.insertBefore(nothingBlock, orderCards);
     }
 }
 function deleteCard(event) {
@@ -58,8 +70,22 @@ function deleteCard(event) {
         card.style.width = '0';
     }, 300);
     setTimeout(() => {
+        const orderCards = document.querySelector('div#order-cards');
+        
         card.remove();
-    }, 500);
+
+        if (!(orderCards.children.length)) {
+            const nothingBlockMain = "Корзина пуста...";
+            const nothingBlockDescription = 
+                'Перейдите в <a href="/">каталог</a>, чтобы добавить товары';
+            const nothingBlock = createNothingBlock(
+                nothingBlockMain,
+                nothingBlockDescription
+            );
+            
+            orderCards.parentElement.insertBefore(nothingBlock, orderCards);
+        }
+    }, 500); 
 }
 async function fetchCart() {
     if (!(localStorage.getItem('orderGoods'))) {
