@@ -165,22 +165,7 @@ aside {
 	gap: 16px;
 }
 
-.filter-menu {
-	display: flex;
-	flex-direction: column;
-}
-.filter-item {
-	display: flex;
-	align-items: center;
-	font-size: 23px;
-	font-weight: 600;
-	padding: 7px 0;
-	color: #333;
-	cursor: pointer;
-	gap: 8px;
-}
-.filter-item input[type="checkbox"],
-form#order input[type="checkbox"] {
+input[type="checkbox"] {
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
@@ -196,12 +181,10 @@ form#order input[type="checkbox"] {
 	position: relative;
 	transition: all 0.3s ease;
 }
-.filter-item input[type="checkbox"]:checked,
-form#order input[type="checkbox"]:checked {
+input[type="checkbox"]:checked {
 	background-color: #1e425a;
 }
-.filter-item input[type="checkbox"]:checked::after,
-form#order input[type="checkbox"]:checked::after {
+input[type="checkbox"]:checked::after {
 	content: '';
 	position: absolute;
 	top: 2.7px;
@@ -214,51 +197,12 @@ form#order input[type="checkbox"]:checked::after {
 	border-width: 0 2px 2px 0;
 	transform: rotate(45deg);
 }
-.filter-item input[type="checkbox"]:hover,
-form#order input[type="checkbox"]:hover {
+input[type="checkbox"]:hover {
 	background-color: #132d3e;
 	opacity: 1;
 }
-.filter-item span {
-	color: #1e425a;
-}
 
-.price-filter-block {
-	display: flex;
-
-}
-
-div.price-filter-block {
-	width: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: stretch;
-	gap: 10px;
-
-	overflow: hidden;
-}
-div.price-filter-block-input {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	gap: 10px;
-}
-div.price-filter-block-input > span {
-	font-size: 21px;
-	font-weight: 550;
-}
-.price-filter-input {
-	width: 100%;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	border-radius: 7px;
-	overflow: hidden;
-}
-div.price-filter-block-input > div > input,
-.field-container input,
-.field-container select,
-textarea {
+input:not([type="checkbox"]), select, textarea {
 	width: 80%;
 	padding: 8px 0 8px 17px;
 	font-size: 21px;
@@ -268,44 +212,8 @@ textarea {
 	color: #1e425a;
 	background-color: #f2e6c9;
 }
-div.price-filter-block-input > div > input:focus,
-.field-container input,
-.field-container select,
-textarea {
+input:not([type="checkbox"]):focus, select, textarea {
     outline: none;
-}
-.price-filter-block-input input[type=number]::-webkit-outer-spin-button,
-.price-filter-block-input input[type=number]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-.number-input-controls {
-	width: 20%;
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-items: center;
-}
-.number-input-button {
-	width: 100%;
-	color: #1e425a;
-	background-color: #f2e6c9;
-	flex-grow: 1;
-
-	font-size: 11px;
-	border: none;
-	cursor: pointer;
-}
-.increase-price {
-	padding: 5px 5px 0 0;
-}
-.decrease-price {
-	padding: 0 5px 5px 0;
-}
-#apply-filters-button {
-	width: 100%;
-	margin-top: 30px !important;
 }
 
 
@@ -315,11 +223,6 @@ textarea {
 	overflow-y: scroll;
 	
 	padding: 0px 60px;
-}
-div.catalog-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
 }
 
 h1.section-header {
@@ -501,23 +404,6 @@ button.main-buttons {
 }
 button.main-buttons:hover {
 	background-color: #132d3e !important;
-}
-#fetch-more-button {
-	width: 100%;
-	height: 50px;
-	font-size: 22px;
-	font-weight: 800;
-	
-	margin-bottom: 35px;
-	border-radius: 15px;
-
-	filter: drop-shadow(17px 19px 24px rgba(0, 0, 0, 0.09));
-	transition: transform 0.6s ease, filter 1s ease;
-}
-#fetch-more-button:hover {
-	position: relative;
-	filter: drop-shadow(17px 19px 24px rgba(0, 0, 0, 0.25));
-	transform: scale(1.005);
 }
 
 footer {
