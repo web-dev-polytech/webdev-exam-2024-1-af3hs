@@ -17,14 +17,13 @@ form#order {
     height: auto;
     gap: 30px;
 }
-input.input-form-item, textarea,
-select.input-form-item {
-    padding-right: 17px;
-}
 .field-container {
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+#last-filed-container {
+    margin-bottom: auto;
 }
 #spam-letters-container {
     display: flex;
@@ -77,9 +76,18 @@ textarea {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
-    margin-top: auto;
 }
 .input-form-button {
     width: 200px;
+}
+
+.total-cost {
+   font-weight: 700;
+   text-align: center;
+
+   margin: auto 0;
+}
+.total-cost-delivery {
+    font-weight: 550;
+    font-size: 20px;
 }

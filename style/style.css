@@ -22,7 +22,8 @@ body {
 	min-height: 100vh;
 }
 .hidden {
-	display: none;
+	overflow: hidden;
+	display: none !important;
 }
 .chosen {
 	background-color: #f4e9ce !important;
@@ -63,7 +64,7 @@ body {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	z-index: 3;
+	z-index: 10;
 
 	padding: 30px 40px;
 
@@ -141,6 +142,53 @@ div.header-search > button {
 }
 
 
+.alert-container {
+	position: sticky;
+	top: 0;
+	z-index: 9;
+	max-height: 220px;
+	overflow: scroll;
+	filter: drop-shadow(17px 19px 24px rgba(0, 0, 0, 0.11));
+}
+.alert {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	overflow-y: scroll;
+
+	padding: 30px 60px;
+	background-color: #cce4ff;
+	filter: drop-shadow(17px -19px 24px rgba(0, 0, 0, 0.03));
+	transition: height 0.3s ease;
+
+	gap: 20px;
+	max-height: 200px;
+}
+
+.alert-message {
+	width: 100%;
+	height: auto;
+	flex-grow: 1;
+	max-height: 140px;
+	z-index: 8;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	word-wrap: break-word;
+}
+.close-button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: transparent;
+	border: none;
+}
+.close-button-img {
+	width: 30px;
+	cursor: pointer;
+}
+
+
 main {
 	display: flex;
 	flex-grow: 1;
@@ -203,8 +251,9 @@ input[type="checkbox"]:hover {
 }
 
 input:not([type="checkbox"]), select, textarea {
+	font-family: inherit;
 	width: 80%;
-	padding: 8px 0 8px 17px;
+	padding: 8px 17px;
 	font-size: 21px;
 	font-weight: 650;
 	border: none;
@@ -215,7 +264,6 @@ input:not([type="checkbox"]), select, textarea {
 input:not([type="checkbox"]):focus, select, textarea {
     outline: none;
 }
-
 
 .catalog, .order-page-wrapper {
 	background-color: #f2e6c9;
@@ -266,7 +314,7 @@ h1.section-header {
     transform: scaleY(0); /* Сжатие по вертикали */
     transform-origin: top; /* Точка открытия сверху */
     transition: transform 0.23s ease; /* Плавный переход высоты */
-    z-index: 10;
+    z-index: 8;
 }
 /* Открытие меню */
 .dropdown:hover .dropdown-button {

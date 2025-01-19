@@ -171,9 +171,10 @@ function addGoodCards(
     let nothingBlock = document.querySelector('.nothing-block');
     if (!(cardContainer.children.length)) {
         if (!(nothingBlock)) {
-            const nothingBlockMain = 'Товаров нет...';
+            const nothingBlockMain = 
+                `Товаров, соответствующих фильтрам, не найдено`;
             const nothingBlockDescription = 
-                'Поменяйте фильтры или повторите попытку позже';
+                `Используйте другие фильтры`;
             nothingBlock = createNothingBlock(
                 nothingBlockMain,
                 nothingBlockDescription
@@ -226,7 +227,9 @@ async function fetchGoods() {
     try {
         const goodsResponse = await fetch(goodsUrl, {method: 'GET'});
         if (!goodsResponse.ok) {
-            throw new Error(`Goods response status: ${goodsResponse.status}`);
+            throw new Error(
+                `Ошибка загрузки товаров. Код ${goodsResponse.status}`
+            );
         }
         const goods = await goodsResponse.json();
 
@@ -254,7 +257,8 @@ async function fetchGoods() {
             );
             if (filterOptions['priceMin'] > filterOptions['priceMax']) {
                 const message = 
-                    "Нижняя граница стоимости не может быть больше верхней";
+                    `Нижняя граница стоимости не может быть больше верхней.
+                    Поменяйте фильтр по стоимости`;
                 notify(message, "error");
                 console.error(message);
                 return;
@@ -283,9 +287,9 @@ async function fetchGoods() {
         const cardContainer = document.querySelector('div.card-container');
         let nothingBlock = document.querySelector('.nothing-block');
         if (!(nothingBlock)) {
-            const nothingBlockMain = 'Товаров нет...';
+            const nothingBlockMain = `Ошибка загрузки товаров...`;
             const nothingBlockDescription = 
-                'Поменяйте фильтры или повторите попытку позже';
+                `Повторите попытку позже`;
             nothingBlock = createNothingBlock(
                 nothingBlockMain,
                 nothingBlockDescription
@@ -295,11 +299,11 @@ async function fetchGoods() {
                 cardContainer
             );
         }
-        notify(error, "error");
-        console.error(error);
+        notify(error.message, "error");
+        console.error(error.message);
 
         if (
-            error.message.includes(`Goods response status:`)
+            error.message.includes(`Ошибка загрузки блюд. Код`)
             && attemptCount < totalAttempts - 1
         ) {
             attemptCount++;

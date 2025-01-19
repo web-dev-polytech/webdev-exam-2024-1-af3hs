@@ -8,7 +8,26 @@ export const ordersURI = '/exam-2024-1/api/orders';
 
 
 export function notify(message, type) {
-    alert(message);
+    const alertContainer = document.querySelector('div.alert-container');
+    const alertBanner = document.createElement('div');
+    alertBanner.id = 'alert';
+    alertBanner.classList.add('alert');
+    alertBanner.innerHTML = `
+        <p class="alert-message">${message}</p>
+        <button class="alert-close close-button">
+            <img class="close-button-img" src="img/close-button.svg">
+        </button>
+    `;
+    
+    alertBanner.querySelector('.alert-close').addEventListener('click', () => {
+        alertBanner.remove();
+    });
+    
+    alertContainer.prepend(alertBanner);
+
+    setTimeout(() => {
+        alertBanner.remove();
+    }, 5000);
 }
 export function buildCard(good, onCatalogPage = true, chosen = false) {
     const card = document.createElement("div");

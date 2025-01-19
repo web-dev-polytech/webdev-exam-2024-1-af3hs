@@ -1,11 +1,14 @@
 import {
     // constants
-    totalAttempts, baseUrl, apiKey, goodsURI,
+    totalAttempts, baseUrl, apiKey, goodsURI, ordersURI,
     // functions
     notify, buildCard, createNothingBlock
 } from './utils.js';
 
+let attemptCount = 0;
+
 let total = 0;
+let deliveryCost = 200;
 
 
 function prepareInterface() {
@@ -31,6 +34,39 @@ function prepareInterface() {
     dateInput.value = tomorrow;
 }
 
+
+function recalculateTotal(removeBlock = false) {
+    let totalCost = document.querySelector('p.total-cost');
+
+    if (totalCost && removeBlock) totalCost.remove();    
+
+    // If interface element doesn't exist
+    if (!(totalCost) && total) {
+        const formPart2 = document.querySelector('div#form-part-2');
+        const formButtonsContainer = document.querySelector(
+            '.form-buttons-container'
+        );
+
+        totalCost = document.createElement('p');
+        totalCost.classList.add('total-cost');
+        totalCost.innerHTML = `
+            Итоговая стоимость: <span id="total-cost">7777</span> ₽
+            <br>
+            <span class="total-cost-delivery">
+                (стоимость доставки: <span id="delivery-cost">200</span> ₽)
+            </span>
+        `;
+        
+        formPart2.insertBefore(totalCost, formButtonsContainer);
+    }
+    if (document.querySelector('p.total-cost')) {
+        const totalCostField = document.querySelector('#total-cost');
+        const deliveryCostField = document.querySelector('#delivery-cost');
+    
+        totalCostField.textContent = total + deliveryCost;
+        deliveryCostField.textContent = deliveryCost;
+    }
+}
 
 function addOrderGoods(orderGoods, goods) {
     const preparedCardIds = Object.keys(orderGoods).map(Number);
@@ -71,8 +107,9 @@ function deleteCard(event) {
     }, 300);
     setTimeout(() => {
         const orderCards = document.querySelector('div#order-cards');
-        
+
         card.remove();
+        recalculateTotal();
 
         if (!(orderCards.children.length)) {
             const nothingBlockMain = "Корзина пуста...";
@@ -84,9 +121,127 @@ function deleteCard(event) {
             );
             
             orderCards.parentElement.insertBefore(nothingBlock, orderCards);
+
+            recalculateTotal(true);
         }
     }, 500); 
 }
+function validate(event) {
+    const orderGoods = JSON.parse(localStorage.getItem('orderGoods'));
+    const length = Object.keys(orderGoods).length;
+    if (!(length)) {
+        event.preventDefault();
+        const message = `Вы не выбрали ни одного товара`;
+        notify(message, "info");
+    }
+}
+
+
+async function checkSenitizeSend(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const subscribeCheckbox = form.querySelector('input[name="subscribe"]');
+    if (subscribeCheckbox && subscribeCheckbox.checked) {
+        subscribeCheckbox.value = 1;
+    }
+    const formData = new FormData(form);
+    
+    // Get ordered goods
+    const goodIds = Object.values(
+        JSON.parse(
+            localStorage.getItem('orderGoods')
+        )
+    ).map(Number);
+    goodIds.forEach((goodId) => {
+        formData.append("good_ids", goodId);
+    });
+    
+    // Change date format
+    const deliveryDateIn = formData.get('delivery_date').split('-');
+    const deliveryDate = 
+        `${deliveryDateIn[2]}.${deliveryDateIn[1]}.${deliveryDateIn[0]}`;
+    formData.set("delivery_date", deliveryDate);
+    console.log(formData.get("delivery_date"));
+
+    const formSendUrl = `${baseUrl}${ordersURI}?api_key=${apiKey}`;
+    // Send the form data to the server using fetch
+    try {
+        const fromSendResponse = await fetch(
+            formSendUrl,
+            {
+                method: 'POST',
+                body: formData
+            });
+
+        if (!fromSendResponse.ok) {
+            if (fromSendResponse.status === 422) {
+                throw new Error(
+                    `Ошибка обработки заказа. Попробуйте позже`
+                );
+            } else if (fromSendResponse.status === 404) {
+                throw new Error(
+                    `Ошибка при отправки заказа. Попробуйте позже`
+                );
+            } else if (fromSendResponse.status === 500) {
+                throw new Error(
+                    `Ошибка сервера. Попробуйте позже`
+                );
+            } else {
+                throw new Error(
+                    `Неизвестная ошибка. Код ${fromSendResponse.statusText}`
+                );
+            }
+        }
+        
+        const blank = await fromSendResponse.json();
+        console.log(blank);
+        
+        let message = `Ваш заказ успешно оформлен`;
+        notify(message, "success");
+        // clearOrder();
+        // recalculateTotal();
+
+    } catch (error) {
+        notify(error.message, "error");
+        console.error(error.message);
+    }
+}
+
+
+function recalculateDeliveryCost(dayOfWeek, timeInterval) {
+    if (!([0, 6].includes(dayOfWeek)) && timeInterval === "18:00-22:00") {
+        deliveryCost = 400;
+    } else if ([0, 6].includes(dayOfWeek)) {
+        deliveryCost = 500;
+    } else {
+        deliveryCost = 200;
+    }
+}
+function runFormFunctions() {
+    const timeIntervalField = document.querySelector("#delivery-interval");
+    timeIntervalField.addEventListener("change", (event) => {
+        const deliveryDateInput = document.getElementById('delivery-date');
+        const deliveryDate = new Date(deliveryDateInput.value);
+
+        const dayOfWeek = deliveryDate.getDay();
+        const timeInterval = event.target.value;
+        
+        recalculateDeliveryCost(dayOfWeek, timeInterval);
+        recalculateTotal();
+    });
+    const dateField = document.querySelector("#delivery-date");
+    dateField.addEventListener("change", (event) => {
+        const date = new Date(event.target.value);
+        
+        const dayOfWeek = date.getDay();
+        const timeInterval = document.getElementById('delivery-interval').value;
+
+        recalculateDeliveryCost(dayOfWeek, timeInterval);
+        recalculateTotal();
+    });
+}
+
 async function fetchCart() {
     if (!(localStorage.getItem('orderGoods'))) {
         localStorage.setItem('orderGoods', JSON.stringify({}));
@@ -96,7 +251,9 @@ async function fetchCart() {
     try {
         const goodsResponse = await fetch(goodsUrl, {method: 'GET'});
         if (!goodsResponse.ok) {
-            throw new Error(`Goods response status: ${goodsResponse.status}`);
+            throw new Error(
+                `Ошибка загрузки товаров. Код ${goodsResponse.status}`
+            );
         }
         const goods = await goodsResponse.json();
         const orderGoods = JSON.parse(localStorage.getItem('orderGoods'));
@@ -110,16 +267,41 @@ async function fetchCart() {
             }
         });
 
+        const orderForm = document.querySelector('form#order');
+        const sendFormButton = document.querySelector('#send-form-button');
+        sendFormButton.addEventListener('click', validate);
+        orderForm.addEventListener('submit', checkSenitizeSend);
+
+        recalculateTotal();
+
+        runFormFunctions();
+        
     } catch (error) {
-        notify(error, "error");
-        console.error(error);
+        const cardContainer = document.querySelector('div.card-container');
+        let nothingBlock = document.querySelector('.nothing-block');
+        if (!(nothingBlock)) {
+            const nothingBlockMain = `Ошибка загрузки товаров...`;
+            const nothingBlockDescription = 
+                `Повторите попытку позже`;
+            const nothingBlock = createNothingBlock(
+                nothingBlockMain,
+                nothingBlockDescription
+            );
+            cardContainer.parentElement.insertBefore(
+                nothingBlock,
+                cardContainer
+            );
+        }
+        
+        notify(error.message, "error");
+        console.error(error.message);
 
         if (
-            error.message.includes(`Goods response status:`)
+            error.message.includes(`Ошибка загрузки товаров. Код`)
             && attemptCount < totalAttempts - 1
         ) {
             attemptCount++;
-            setTimeout(fetchGoods, 5000);
+            setTimeout(fetchCart, 5000);
         }
     }
 }
