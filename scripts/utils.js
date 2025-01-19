@@ -12,6 +12,11 @@ export function notify(message, type) {
     const alertBanner = document.createElement('div');
     alertBanner.id = 'alert';
     alertBanner.classList.add('alert');
+    if (type === "error") {
+        alertBanner.classList.add('error-alert');
+    } else if (type === "success") {
+        alertBanner.classList.add('success-alert');
+    }
     alertBanner.innerHTML = `
         <p class="alert-message">${message}</p>
         <button class="alert-close close-button">

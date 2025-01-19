@@ -11,7 +11,7 @@ let total = 0;
 let deliveryCost = 200;
 
 
-function prepareInterface() {
+function prepareDateField() {
     const dateInput = document.getElementById('delivery-date');
     const todayRaw = new Date();
     const tomorrowRaw = new Date(todayRaw);
@@ -38,7 +38,7 @@ function prepareInterface() {
 function recalculateTotal(removeBlock = false) {
     let totalCost = document.querySelector('p.total-cost');
 
-    if (totalCost && removeBlock) totalCost.remove();    
+    if (totalCost && removeBlock) totalCost.remove();
 
     // If interface element doesn't exist
     if (!(totalCost) && total) {
@@ -136,7 +136,33 @@ function validate(event) {
     }
 }
 
+function clearOrder(event = null) {
+    const orderForm = document.querySelector('form#order');
+    localStorage.setItem('orderGoods', JSON.stringify({}));
+    total = 0;
+    orderForm.reset();
 
+    const orderCards = document.querySelector('div#order-cards');
+    let nothingBlock = document.querySelector('.nothing-block');
+
+    while (orderCards.children.length) {
+        orderCards.children[0].remove();
+    }
+    if (!(orderCards.children.length) && !(nothingBlock)) {
+        const nothingBlockMain = "Корзина пуста...";
+        const nothingBlockDescription = 
+            'Перейдите в <a href="/">каталог</a>, чтобы добавить товары';
+        nothingBlock = createNothingBlock(
+            nothingBlockMain,
+            nothingBlockDescription
+        );
+        
+        orderCards.parentElement.insertBefore(nothingBlock, orderCards);
+
+        recalculateTotal(true);
+    }
+    
+}
 async function checkSenitizeSend(event) {
     event.preventDefault();
 
@@ -162,7 +188,6 @@ async function checkSenitizeSend(event) {
     const deliveryDate = 
         `${deliveryDateIn[2]}.${deliveryDateIn[1]}.${deliveryDateIn[0]}`;
     formData.set("delivery_date", deliveryDate);
-    console.log(formData.get("delivery_date"));
 
     const formSendUrl = `${baseUrl}${ordersURI}?api_key=${apiKey}`;
     // Send the form data to the server using fetch
@@ -199,8 +224,7 @@ async function checkSenitizeSend(event) {
         
         let message = `Ваш заказ успешно оформлен`;
         notify(message, "success");
-        // clearOrder();
-        // recalculateTotal();
+        clearOrder();
 
     } catch (error) {
         notify(error.message, "error");
@@ -269,8 +293,10 @@ async function fetchCart() {
 
         const orderForm = document.querySelector('form#order');
         const sendFormButton = document.querySelector('#send-form-button');
-        sendFormButton.addEventListener('click', validate);
+        const clearFormButton = document.querySelector('#clear-form-button');
         orderForm.addEventListener('submit', checkSenitizeSend);
+        sendFormButton.addEventListener('click', validate);
+        clearFormButton.addEventListener('click', clearOrder);
 
         recalculateTotal();
 
@@ -308,4 +334,4 @@ async function fetchCart() {
 
 
 fetchCart();
-prepareInterface();
+prepareDateField();

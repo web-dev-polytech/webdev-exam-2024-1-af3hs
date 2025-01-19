@@ -259,7 +259,7 @@ async function fetchGoods() {
                 const message = 
                     `Нижняя граница стоимости не может быть больше верхней.
                     Поменяйте фильтр по стоимости`;
-                notify(message, "error");
+                notify(message, "info");
                 console.error(message);
                 return;
             }
@@ -303,7 +303,7 @@ async function fetchGoods() {
         console.error(error.message);
 
         if (
-            error.message.includes(`Ошибка загрузки блюд. Код`)
+            error.message.includes(`Ошибка загрузки товаров. Код`)
             && attemptCount < totalAttempts - 1
         ) {
             attemptCount++;
