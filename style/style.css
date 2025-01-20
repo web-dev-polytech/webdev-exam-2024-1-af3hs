@@ -32,6 +32,9 @@ body {
 	box-shadow: inset 0px 0px 20px #32230350;
 	
 }
+.align-text-left {
+	text-align: left !important;
+}
 .chosen:hover {
 	transform: none !important;
 }
@@ -194,7 +197,7 @@ div.header-search > button {
 	border: none;
 }
 .close-button-img {
-	width: 30px;
+	width: 15px;
 	cursor: pointer;
 }
 
@@ -275,7 +278,7 @@ input:not([type="checkbox"]):focus, select, textarea {
     outline: none;
 }
 
-.catalog, .order-page-wrapper {
+.catalog, .order-page-wrapper, .orders-page-wrapper {
 	background-color: #f2e6c9;
 	flex-grow: 1;
 	overflow-y: scroll;
@@ -461,7 +464,7 @@ button.main-buttons {
 	transition: 0.5s ease;
 }
 button.main-buttons:hover {
-	background-color: #132d3e !important;
+	background-color: #132d3e;
 }
 
 footer {

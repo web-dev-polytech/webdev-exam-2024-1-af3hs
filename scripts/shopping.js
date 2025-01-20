@@ -312,6 +312,10 @@ async function fetchGoods() {
     }
 }
 
+function runCatalogPageFunctionality() {
+    fetchGoods();
+    prepareInterface();
+}
 
-fetchGoods();
-prepareInterface();
+
+runCatalogPageFunctionality();

@@ -332,6 +332,10 @@ async function fetchCart() {
     }
 }
 
+function runOrderPageFunctionality() {
+    fetchCart();
+    prepareDateField();
+}
 
-fetchCart();
-prepareDateField();
+
+runOrderPageFunctionality();

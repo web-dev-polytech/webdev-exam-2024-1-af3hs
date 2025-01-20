@@ -20,7 +20,7 @@ export function notify(message, type) {
     alertBanner.innerHTML = `
         <p class="alert-message">${message}</p>
         <button class="alert-close close-button">
-            <img class="close-button-img" src="img/close-button.svg">
+            <img class="close-button-img" src="img/close-button.png">
         </button>
     `;
     

@@ -1,11 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/orders.css">
+    <title>Личный кабинет</title>
 </head>
+
 <body>
-    
+    <div class="wrapper">
+        <header class="header">
+            <div class="header-logo">
+                <img class="header-logo-img" src="img/logo.png">
+                <span class="header-logo-text">Magazin.Ru</span>
+            </div>
+            
+            <div class="header-redirects">
+                <a class="header-redirect" href="index.html"><img id="catalog-redirect" src="img/catalog.png"></a>
+                <a class="header-redirect" href="order.html"><img id="order-redirect" src="img/cart.png"></a>
+            </div>
+        </header>
+
+        
+        <div class="alert-container">
+
+        </div>
+
+
+        <main>
+            <div class="orders-page-wrapper">
+                <div class="catalog-header">
+                    <h1 class="section-header">Заказы</h1>
+                </div>
+                <table id="orders-table">
+                    <thead id="orders-table-head">
+                        <tr class="table-row">
+                            <th class="table-cell">№</th>
+                            <th class="table-cell">Дата оформления</th>
+                            <th class="table-cell align-text-left wide-cell">Состав заказа</th>
+                            <th class="table-cell">Стоимость</th>
+                            <th class="table-cell">Доставка</th>
+                            <th class="table-cell actions-cell"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </main>
+
+
+        <footer>
+            <p class="footer-text">© 2025 Magazin.Ru</p>
+        </footer>
+    </div>
+
+    <script type="module" src="scripts/orders.js"></script>
 </body>
+
 </html>
